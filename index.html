@@ -6,16 +6,30 @@
     <!-- ======================================================= -->
     <!-- CONFIGURAÇÕES PWA (WEB APP NATIVO PARA MOBILE)          -->
     <!-- ======================================================= -->
+    
+    <!-- Força a escala correta no mobile e impede o zoom duplo -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- Configurações para iOS (Apple) -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Manutenção ATIC">
+    
+    <!-- Cor da barra superior (Android) -->
     <meta name="theme-color" content="#1A365D">
+    
+    <!-- Ícone que aparecerá na tela do telemóvel -->
+    <link rel="apple-touch-icon" href="https://lh3.googleusercontent.com/d/1hLHrX8zWkOv6Z6NRPUGHi2Q1MMisdvcs">
+    
+    <!-- Script Dinâmico que gera o Manifest do App (Android/iOS) -->
     <script>
+      // PAINEL DE CONFIGURAÇÃO DA OM
       const OM_CONFIG = {
-        API_URL: "https://script.google.com/macros/s/AKfycbyM4Dbtjmn-ri_08ebTwakvX00qF0t1Oz1wj-YKuqW816OasWQCmEw7wV9up9hAqWEJ0A/exec", // ⚠️ INSIRA SUA URL AQUI
+        // ⚠️ ATENÇÃO: COLE A URL DO SEU APPS SCRIPT ABAIXO (A mesma que você gerou na Fase 1)
+        API_URL: "https://script.google.com/macros/s/AKfycbyM4Dbtjmn-ri_08ebTwakvX00qF0t1Oz1wj-YKuqW816OasWQCmEw7wV9up9hAqWEJ0A/exec", 
         SIGLA: "ATIC",
-        COR_PRIMARIA: "#1A365D"
+        COR_PRIMARIA: "#1A365D",
+        LOGO: "https://lh3.googleusercontent.com/d/1hLHrX8zWkOv6Z6NRPUGHi2Q1MMisdvcs"
       };
 
       document.addEventListener("DOMContentLoaded", function() {
@@ -23,9 +37,14 @@
           "name": "Manutenção " + OM_CONFIG.SIGLA,
           "short_name": "Manutenção",
           "start_url": window.location.href, 
-          "display": "standalone",
+          "display": "standalone", // Oculta a barra do navegador
           "background_color": "#f4f6f9",
-          "theme_color": OM_CONFIG.COR_PRIMARIA
+          "theme_color": OM_CONFIG.COR_PRIMARIA,
+          "icons": [{
+            "src": OM_CONFIG.LOGO,
+            "sizes": "512x512",
+            "type": "image/png"
+          }]
         };
         const blob = new Blob([JSON.stringify(manifest)], {type: 'application/json'});
         document.querySelector('head').insertAdjacentHTML('beforeend', `<link rel="manifest" href="${URL.createObjectURL(blob)}">`);
@@ -39,23 +58,31 @@
     <style>
       /* CSS RESET: Ocupação total da tela para Mobile */
       html, body { 
-        width: 100%; min-height: 100vh; margin: 0; padding: 0; overflow-x: hidden; 
-        background-color: #f4f6f9; font-family: 'Segoe UI', Tahoma, sans-serif; 
+        width: 100%; 
+        min-height: 100vh; 
+        margin: 0; 
+        padding: 0; 
+        overflow-x: hidden; 
+        background-color: #f4f7f6; 
+        font-family: 'Segoe UI', Tahoma, sans-serif; 
       }
+      
       .app-header { background-color: #1A365D; color: white; padding: 15px; border-bottom: 4px solid #2B6CB0; }
       .container-app { padding: 15px; padding-bottom: 40px; }
       .card { border-radius: 12px; border: none; }
       .sugestao-item { cursor: pointer; font-size: 0.9rem; }
       .sugestao-item:hover { background-color: #f8f9fa; font-weight: bold; }
+      
       @media (max-width: 576px) {
         .container-app { padding: 10px 0; }
-        .card { border-radius: 0; }
+        .card { border-radius: 0; border-left: none; border-right: none;}
         .table-responsive { font-size: 0.85rem; }
       }
     </style>
   </head>
   <body>
     
+    <!-- CABEÇALHO ESTILO APLICATIVO NATIVO -->
     <div class="app-header shadow-sm sticky-top">
       <div class="d-flex justify-content-between align-items-center">
         <h5 class="mb-0 fw-bold"><i class="bi bi-pc-display"></i> Manutenção ATIC</h5>
@@ -81,7 +108,7 @@
           </div>
         </div>
         <div class="card-body p-0 table-responsive">
-          <table class="table table-hover align-middle mb-0 text-center" style="font-size: 0.85rem;">
+          <table class="table table-hover align-middle mb-0 text-center">
             <thead class="table-light">
               <tr><th>ENTRADA</th><th>CLIENTE</th><th>EQUIPAMENTO</th><th>STATUS</th><th>AÇÕES</th></tr>
             </thead>
