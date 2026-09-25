@@ -1,31 +1,21 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
   <head>
     <meta charset="UTF-8">
     
     <!-- ======================================================= -->
     <!-- CONFIGURAÇÕES PWA (WEB APP NATIVO PARA MOBILE)          -->
     <!-- ======================================================= -->
-    
-    <!-- Força a escala correta no mobile e impede o zoom duplo -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    
-    <!-- Configurações para iOS (Apple) -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Manutenção ATIC">
-    
-    <!-- Cor da barra superior (Android) -->
     <meta name="theme-color" content="#1A365D">
-    
-    <!-- Ícone que aparecerá na tela do telemóvel -->
     <link rel="apple-touch-icon" href="https://lh3.googleusercontent.com/d/1hLHrX8zWkOv6Z6NRPUGHi2Q1MMisdvcs">
     
-    <!-- Script Dinâmico que gera o Manifest do App (Android/iOS) -->
     <script>
-      // PAINEL DE CONFIGURAÇÃO DA OM
       const OM_CONFIG = {
-        // ⚠️ ATENÇÃO: COLE A URL DO SEU APPS SCRIPT ABAIXO (A mesma que você gerou na Fase 1)
+        // ⚠️ ATENÇÃO: COLE A URL DO SEU APPS SCRIPT ABAIXO TERMINADA EM /exec
         API_URL: "https://script.google.com/macros/s/AKfycbyM4Dbtjmn-ri_08ebTwakvX00qF0t1Oz1wj-YKuqW816OasWQCmEw7wV9up9hAqWEJ0A/exec", 
         SIGLA: "ATIC",
         COR_PRIMARIA: "#1A365D",
@@ -37,7 +27,7 @@
           "name": "Manutenção " + OM_CONFIG.SIGLA,
           "short_name": "Manutenção",
           "start_url": window.location.href, 
-          "display": "standalone", // Oculta a barra do navegador
+          "display": "standalone",
           "background_color": "#f4f6f9",
           "theme_color": OM_CONFIG.COR_PRIMARIA,
           "icons": [{
@@ -50,28 +40,21 @@
         document.querySelector('head').insertAdjacentHTML('beforeend', `<link rel="manifest" href="${URL.createObjectURL(blob)}">`);
       });
     </script>
-    <!-- ======================================================= -->
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     
     <style>
-      /* CSS RESET: Ocupação total da tela para Mobile */
+      /* CSS RESET E LAYOUT MOBILE PWA */
       html, body { 
-        width: 100%; 
-        min-height: 100vh; 
-        margin: 0; 
-        padding: 0; 
-        overflow-x: hidden; 
-        background-color: #f4f7f6; 
-        font-family: 'Segoe UI', Tahoma, sans-serif; 
+        width: 100%; min-height: 100vh; margin: 0; padding: 0; overflow-x: hidden; 
+        background-color: #f4f7f6; font-family: 'Segoe UI', Tahoma, sans-serif; 
       }
-      
       .app-header { background-color: #1A365D; color: white; padding: 15px; border-bottom: 4px solid #2B6CB0; }
-      .container-app { padding: 15px; padding-bottom: 40px; }
+      .container-app { padding: 15px; padding-bottom: 50px; }
       .card { border-radius: 12px; border: none; }
-      .sugestao-item { cursor: pointer; font-size: 0.9rem; }
+      .sugestao-item { cursor: pointer; font-size: 0.9rem; padding: 10px 15px; }
       .sugestao-item:hover { background-color: #f8f9fa; font-weight: bold; }
+      .btn-acao { padding: 0.30rem 0.6rem; font-size: 0.95rem; margin: 0 2px;}
       
       @media (max-width: 576px) {
         .container-app { padding: 10px 0; }
@@ -82,22 +65,34 @@
   </head>
   <body>
     
-    <!-- CABEÇALHO ESTILO APLICATIVO NATIVO -->
+    <!-- CABEÇALHO NATIVO -->
     <div class="app-header shadow-sm sticky-top">
       <div class="d-flex justify-content-between align-items-center">
-        <h5 class="mb-0 fw-bold"><i class="bi bi-pc-display"></i> Manutenção ATIC</h5>
-        <button class="btn btn-sm btn-outline-light border-0" onclick="window.location.reload()"><i class="bi bi-arrow-clockwise fs-5"></i></button>
+        <h5 class="mb-0 fw-bold">🖥️ Gestão de Equipamentos</h5>
+        <button class="btn btn-sm btn-outline-light border-0" onclick="window.location.reload()"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/><path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/></svg></button>
       </div>
     </div>
 
+    <!-- ========================================== -->
+    <!-- ÍCONES OFICIAIS OCULTOS (À PROVA DE FALHAS)-->
+    <!-- ========================================== -->
+    <div id="icones-ocultos" style="display: none;">
+      <div id="svg-zap"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/></svg></div>
+      <div id="svg-email"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414zM0 4.697v7.104l5.803-3.558zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586zm3.436-.586L16 11.801V4.697z"/></svg></div>
+      <div id="svg-edit"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/><path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/></svg></div>
+      <div id="svg-del"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"/></svg></div>
+      <div id="svg-saida"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z"/><path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z"/></svg></div>
+    </div>
+
+    <!-- MAIN APP CONTAINER -->
     <div class="container-app">
       <div class="d-flex justify-content-end mb-3 px-2 px-md-0">
-        <button class="btn btn-warning fw-bold text-dark shadow-sm w-100 py-3" onclick="abrirModalEntrada()">📥 REGISTRAR NOVA ENTRADA</button>
+        <button class="btn btn-warning fw-bold text-dark shadow-sm w-100 py-3 fs-5" onclick="abrirModalEntrada()">📥 REGISTRAR NOVA ENTRADA</button>
       </div>
 
       <div class="card shadow-sm border-0 border-top border-4 border-dark">
         <div class="card-header bg-white d-flex justify-content-between align-items-center flex-wrap gap-2 py-3">
-          <h6 class="mb-0 fw-bold text-dark d-flex align-items-center"><i class="bi bi-list-task me-2"></i> Equipamentos <span class="badge bg-secondary ms-2" id="contadorEqp">0</span></h6>
+          <h6 class="mb-0 fw-bold text-dark d-flex align-items-center">Equipamentos <span class="badge bg-secondary ms-2" id="contadorEqp">0</span></h6>
           <div class="d-flex gap-2 w-100 mt-2 mt-md-0">
             <select id="filtroStatusEqp" class="form-select form-select-sm" style="max-width: 130px;" onchange="filtrarTabelaEqp()">
               <option value="TODOS">Todos</option>
@@ -109,11 +104,11 @@
         </div>
         <div class="card-body p-0 table-responsive">
           <table class="table table-hover align-middle mb-0 text-center">
-            <thead class="table-light">
-              <tr><th>ENTRADA</th><th>CLIENTE</th><th>EQUIPAMENTO</th><th>STATUS</th><th>AÇÕES</th></tr>
+            <thead class="table-light text-nowrap">
+              <tr><th>ENTRADA</th><th>CLIENTE</th><th>EQUIPAMENTO</th><th>TÉC. RECEBEU</th><th>TÉC. MANUTENÇÃO</th><th>STATUS</th><th>AÇÕES</th></tr>
             </thead>
             <tbody id="tabelaEqpCorpo">
-              <tr><td colspan="5" class="py-4 text-muted"><div class="spinner-border spinner-border-sm text-secondary"></div> Conectando...</td></tr>
+              <tr><td colspan="7" class="py-4 text-muted"><div class="spinner-border spinner-border-sm text-secondary"></div> Conectando API...</td></tr>
             </tbody>
           </table>
         </div>
@@ -125,29 +120,25 @@
       <div class="modal-dialog modal-lg modal-dialog-centered modal-fullscreen-sm-down">
         <div class="modal-content border-0">
           <div class="modal-header bg-warning">
-            <h5 class="modal-title fw-bold text-dark"><i class="bi bi-box-arrow-in-right"></i> Nova Entrada</h5>
+            <h5 class="modal-title fw-bold text-dark">📥 Nova Entrada</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
           </div>
-          <div class="modal-body p-4">
+          <div class="modal-body p-4 text-start">
             <form id="formEntrada" onsubmit="processarEntrada(event)">
-              <div class="mb-3 text-start">
-                <label class="form-label fw-bold">Entregue por (Nome/Setor)</label>
-                <input type="text" class="form-control form-control-lg" id="eqpCliente" required>
+              <div class="row">
+                <div class="col-md-6 mb-3"><label class="form-label fw-bold">Cliente (Entregou)</label><input type="text" class="form-control form-control-lg" id="eqpCliente" required></div>
+                <div class="col-md-6 mb-3 position-relative">
+                  <label class="form-label fw-bold">Técnico (Recebeu)</label>
+                  <input type="text" class="form-control form-control-lg" id="eqpTecnico" required placeholder="Iniciais..." autocomplete="off" onkeyup="filtrarTecnicos(this, 'sug-ent-tec')" onclick="filtrarTecnicos(this, 'sug-ent-tec')">
+                  <ul class="list-group position-absolute w-100 shadow" id="sug-ent-tec" style="display:none; z-index: 1050; max-height: 150px; overflow-y: auto;"></ul>
+                </div>
               </div>
-              
-              <div class="mb-3 text-start position-relative">
-                <label class="form-label fw-bold">Recebido por (Técnico ATIC)</label>
-                <input type="text" class="form-control form-control-lg" id="eqpTecnico" required placeholder="Digite as iniciais..." autocomplete="off" onkeyup="filtrarTecnicos('eqpTecnico', 'lista-tecnicos-entrada')" onclick="filtrarTecnicos('eqpTecnico', 'lista-tecnicos-entrada')">
-                <ul class="list-group position-absolute w-100 shadow" id="lista-tecnicos-entrada" style="display: none; z-index: 1050; max-height: 180px; overflow-y: auto;"></ul>
+              <div class="row bg-light p-2 rounded mb-3 border">
+                <div class="col-md-6 mb-2"><label class="form-label fw-bold">WhatsApp</label><input type="tel" class="form-control" id="eqpCelular" required oninput="formatarCelular(this)" maxlength="15"></div>
+                <div class="col-md-6 mb-2"><label class="form-label fw-bold">E-mail</label><input type="email" class="form-control" id="eqpEmail" required></div>
               </div>
-              
-              <div class="bg-light p-3 rounded mb-3 border">
-                <p class="mb-2 fw-bold text-secondary"><small>CONTATOS DO CLIENTE</small></p>
-                <div class="mb-2 text-start"><label class="form-label fw-bold">WhatsApp</label><input type="tel" class="form-control" id="eqpCelular" required oninput="formatarCelular(this)" maxlength="15"></div>
-                <div class="mb-2 text-start"><label class="form-label fw-bold">E-mail</label><input type="email" class="form-control" id="eqpEmail" required></div>
-              </div>
-              <div class="mb-3 text-start"><label class="form-label fw-bold">Equipamentos</label><textarea class="form-control" id="eqpDescricao" rows="2" required></textarea></div>
-              <div class="mb-3 text-start"><label class="form-label fw-bold">Problema Relatado</label><textarea class="form-control" id="eqpProblema" rows="2" required></textarea></div>
+              <div class="mb-3"><label class="form-label fw-bold">Equipamentos</label><textarea class="form-control" id="eqpDescricao" rows="2" required></textarea></div>
+              <div class="mb-3"><label class="form-label fw-bold">Problema Relatado</label><textarea class="form-control" id="eqpProblema" rows="2" required></textarea></div>
               <div class="d-grid mt-4"><button type="submit" class="btn btn-warning fw-bold text-dark btn-lg py-3 shadow-sm" id="btnSalvarEntrada">Confirmar Entrada</button></div>
             </form>
           </div>
@@ -160,19 +151,22 @@
       <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
         <div class="modal-content border-0">
           <div class="modal-header bg-success text-white">
-            <h5 class="modal-title fw-bold"><i class="bi bi-box-arrow-right"></i> Devolução</h5>
+            <h5 class="modal-title fw-bold">📤 Registrar Devolução</h5>
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
           </div>
           <div class="modal-body p-4 text-start">
             <form id="formSaida" onsubmit="processarSaida(event)">
               <input type="hidden" id="saidaLinha">
-              
+              <div class="mb-3 position-relative">
+                <label class="form-label fw-bold text-primary">Quem executou a manutenção?</label>
+                <input type="text" class="form-control form-control-lg border-primary" id="saidaTecManutencao" required placeholder="Iniciais..." autocomplete="off" onkeyup="filtrarTecnicos(this, 'sug-sai-manut')" onclick="filtrarTecnicos(this, 'sug-sai-manut')">
+                <ul class="list-group position-absolute w-100 shadow" id="sug-sai-manut" style="display:none; z-index: 1050; max-height: 150px; overflow-y: auto;"></ul>
+              </div>
               <div class="mb-3 position-relative">
                 <label class="form-label fw-bold">Técnico que está devolvendo</label>
-                <input type="text" class="form-control form-control-lg" id="saidaTecnico" required placeholder="Digite as iniciais..." autocomplete="off" onkeyup="filtrarTecnicos('saidaTecnico', 'lista-tecnicos-saida')" onclick="filtrarTecnicos('saidaTecnico', 'lista-tecnicos-saida')">
-                <ul class="list-group position-absolute w-100 shadow" id="lista-tecnicos-saida" style="display: none; z-index: 1050; max-height: 180px; overflow-y: auto;"></ul>
+                <input type="text" class="form-control form-control-lg" id="saidaTecnico" required placeholder="Iniciais..." autocomplete="off" onkeyup="filtrarTecnicos(this, 'sug-sai-tec')" onclick="filtrarTecnicos(this, 'sug-sai-tec')">
+                <ul class="list-group position-absolute w-100 shadow" id="sug-sai-tec" style="display:none; z-index: 1050; max-height: 150px; overflow-y: auto;"></ul>
               </div>
-              
               <div class="mb-4"><label class="form-label fw-bold">Cliente que está recebendo</label><input type="text" class="form-control form-control-lg" id="saidaCliente" required></div>
               <div class="d-grid mt-4"><button type="submit" class="btn btn-success fw-bold btn-lg py-3 shadow-sm" id="btnSalvarSaida">Concluir Devolução</button></div>
             </form>
@@ -181,15 +175,83 @@
       </div>
     </div>
 
-    <!-- MODAIS ELEGANTES GLOBAIS -->
-    <div class="modal fade" id="modalAviso" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content border-0 shadow-lg"><div class="modal-header bg-success text-white" id="modalAvisoHeader"><h5 class="modal-title fw-bold"><i class="bi bi-check-circle"></i> Sucesso</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body text-center fs-5 py-4" id="modalAvisoBody"></div><div class="modal-footer justify-content-center border-0"><button type="button" class="btn btn-secondary w-75 fw-bold py-2" data-bs-dismiss="modal">OK</button></div></div></div></div>
-    
-    <div class="modal fade" id="modalZap" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content border-success shadow-lg"><div class="modal-header bg-success text-white"><h5 class="modal-title fw-bold"><i class="bi bi-whatsapp"></i> WhatsApp</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body text-center fs-5 py-4"><p id="modalZapBody" class="mb-2"></p><p class="fw-bold text-success mt-3">Deseja enviar o comprovante via WhatsApp agora?</p></div><div class="modal-footer d-flex justify-content-between border-0"><button type="button" class="btn btn-secondary w-25 py-2 fw-bold" data-bs-dismiss="modal">Não</button><button type="button" class="btn btn-success w-50 py-2 fw-bold shadow-sm" id="btnConfirmaZap">Sim, Enviar</button></div></div></div></div>
+    <!-- MODAL EDITAR (CRUD COMPLETO) -->
+    <div class="modal fade" id="modalEditar" tabindex="-1">
+      <div class="modal-dialog modal-lg modal-dialog-centered modal-fullscreen-sm-down">
+        <div class="modal-content border-primary border-2">
+          <div class="modal-header bg-primary text-white">
+            <h5 class="modal-title fw-bold">✏️ Editar Registro</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body p-4 text-start">
+            <form id="formEditar" onsubmit="processarEdicao(event)">
+              <input type="hidden" id="editLinha">
+              <div class="row">
+                <div class="col-md-4 mb-2"><label class="form-label fw-bold small">Data Entrada</label><input type="text" class="form-control form-control-sm" id="editDataEntrada" required></div>
+                <div class="col-md-4 mb-2"><label class="form-label fw-bold small">Status</label>
+                  <select class="form-select form-select-sm" id="editStatus">
+                    <option value="NA OFICINA">NA OFICINA</option><option value="DEVOLVIDO">DEVOLVIDO</option>
+                  </select>
+                </div>
+                <div class="col-md-4 mb-2"><label class="form-label fw-bold small">Data Saída</label><input type="text" class="form-control form-control-sm" id="editDataSaida"></div>
+              </div>
+              <div class="row mt-2">
+                <div class="col-md-4 mb-2"><label class="form-label fw-bold small">Cliente (Entregou)</label><input type="text" class="form-control form-control-sm" id="editClienteEntregou"></div>
+                <div class="col-md-4 mb-2"><label class="form-label fw-bold small">WhatsApp</label><input type="tel" class="form-control form-control-sm" id="editCelular"></div>
+                <div class="col-md-4 mb-2"><label class="form-label fw-bold small">E-mail</label><input type="email" class="form-control form-control-sm" id="editEmail"></div>
+              </div>
+              <div class="row mt-2">
+                <div class="col-md-4 mb-2 position-relative"><label class="form-label fw-bold small">Téc. Recebeu</label><input type="text" class="form-control form-control-sm" id="editTecRecebeu" autocomplete="off" onkeyup="filtrarTecnicos(this, 'sug-ed-1')" onclick="filtrarTecnicos(this, 'sug-ed-1')"><ul class="list-group position-absolute w-100 shadow" id="sug-ed-1" style="display:none; z-index:1050; max-height:150px; overflow-y:auto;"></ul></div>
+                <div class="col-md-4 mb-2 position-relative"><label class="form-label fw-bold small">Téc. Manutenção</label><input type="text" class="form-control form-control-sm" id="editTecManutencao" autocomplete="off" onkeyup="filtrarTecnicos(this, 'sug-ed-2')" onclick="filtrarTecnicos(this, 'sug-ed-2')"><ul class="list-group position-absolute w-100 shadow" id="sug-ed-2" style="display:none; z-index:1050; max-height:150px; overflow-y:auto;"></ul></div>
+                <div class="col-md-4 mb-2 position-relative"><label class="form-label fw-bold small">Téc. Devolveu</label><input type="text" class="form-control form-control-sm" id="editTecDevolveu" autocomplete="off" onkeyup="filtrarTecnicos(this, 'sug-ed-3')" onclick="filtrarTecnicos(this, 'sug-ed-3')"><ul class="list-group position-absolute w-100 shadow" id="sug-ed-3" style="display:none; z-index:1050; max-height:150px; overflow-y:auto;"></ul></div>
+              </div>
+              <div class="row mt-2">
+                <div class="col-md-6 mb-2"><label class="form-label fw-bold small">Equipamento</label><textarea class="form-control form-control-sm" id="editEquipamentos" rows="2"></textarea></div>
+                <div class="col-md-6 mb-2"><label class="form-label fw-bold small">Problema / Observação</label><textarea class="form-control form-control-sm" id="editProblema" rows="2"></textarea></div>
+              </div>
+              <div class="mt-2"><label class="form-label fw-bold small">Cliente (Recebeu)</label><input type="text" class="form-control form-control-sm" id="editClienteRecebeu"></div>
+              <div class="d-grid mt-4"><button type="submit" class="btn btn-primary fw-bold py-2" id="btnSalvarEdicao">Gravar Alterações</button></div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAIS GLOBAIS DE AVISO E CONFIRMAÇÃO -->
+    <div class="modal fade" id="modalAviso" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg">
+          <div class="modal-header bg-success text-white" id="modalAvisoHeader">
+            <h5 class="modal-title fw-bold">✅ Sucesso</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body text-center fs-5 py-4" id="modalAvisoBody"></div>
+          <div class="modal-footer justify-content-center border-0" id="modalAvisoFooter"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="modalConfirmacao" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-danger shadow-lg">
+          <div class="modal-header bg-danger text-white">
+            <h5 class="modal-title fw-bold">⚠️ Atenção</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body text-center fs-5 py-4" id="modalConfirmacaoBody"></div>
+          <div class="modal-footer d-flex justify-content-between border-0">
+            <button type="button" class="btn btn-secondary w-25 fw-bold" data-bs-dismiss="modal">Não</button>
+            <button type="button" class="btn btn-danger w-50 fw-bold" id="btnConfirmaExclusao">Sim, Remover</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
     <script>
-      let modalAvisoObj, modalZapObj, linkZapPendente = "";
-      let modalInstanceEntrada, modalInstanceSaida;
+      let modalInstanceEntrada, modalInstanceSaida, modalInstanceEditar;
+      let modalAvisoObj, modalConfirmaObj, linhaParaExcluir = null;
       let listaEqpCache = [], listaTecnicosCache = []; 
 
       // ==========================================
@@ -202,39 +264,20 @@
           body: JSON.stringify({ action: acao, ...parametros })
         });
         const resultado = await resposta.json();
+        // O Apps Script da Manutenção retorna os dados dentro da própria resposta.
+        // Se a chamada envolver "sucesso", repassamos o data inteiro.
         if (resultado.status === "success") return resultado.data;
         else throw new Error(resultado.message);
       }
 
       window.onload = function() {
+        modalInstanceEntrada = new bootstrap.Modal(document.getElementById('modalEntrada'));
+        modalInstanceSaida = new bootstrap.Modal(document.getElementById('modalSaida'));
+        modalInstanceEditar = new bootstrap.Modal(document.getElementById('modalEditar'));
         modalAvisoObj = new bootstrap.Modal(document.getElementById('modalAviso'));
-        modalZapObj = new bootstrap.Modal(document.getElementById('modalZap'));
+        modalConfirmaObj = new bootstrap.Modal(document.getElementById('modalConfirmacao'));
         carregarTabelaEqp();
       };
-
-      function mostrarAviso(msg, tipo = 'success') {
-        let header = document.getElementById('modalAvisoHeader');
-        if(tipo === 'error') {
-            header.className = 'modal-header bg-danger text-white';
-            header.innerHTML = '<h5 class="modal-title fw-bold"><i class="bi bi-exclamation-octagon"></i> Erro</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>';
-        } else {
-            header.className = 'modal-header bg-success text-white';
-            header.innerHTML = '<h5 class="modal-title fw-bold"><i class="bi bi-check-circle"></i> Sucesso</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>';
-        }
-        document.getElementById('modalAvisoBody').innerHTML = msg;
-        modalAvisoObj.show();
-      }
-
-      function confirmarZap(msg, link) {
-        document.getElementById('modalZapBody').innerHTML = msg;
-        linkZapPendente = link;
-        modalZapObj.show();
-      }
-
-      document.getElementById('btnConfirmaZap').addEventListener('click', function() {
-        modalZapObj.hide();
-        if(linkZapPendente) window.open(linkZapPendente, '_blank');
-      });
 
       function formatarCelular(input) {
         let valor = input.value.replace(/\D/g, "");
@@ -244,54 +287,78 @@
         input.value = valor;
       }
 
-      function carregarTabelaEqp() {
-        chamarBackend('obterListaTecnicos')
-          .then(tecnicos => {
-             listaTecnicosCache = tecnicos || [];
-             return chamarBackend('listarEquipamentos');
-          })
-          .then(dados => {
-             listaEqpCache = dados || [];
-             filtrarTabelaEqp();
-          })
-          .catch(e => mostrarAviso("Erro de conexão: " + e.message, 'error'));
+      function mostrarAviso(msg, tipo = 'success', linkZap = null) {
+        let header = document.getElementById('modalAvisoHeader');
+        let footer = document.getElementById('modalAvisoFooter');
+        
+        if(tipo === 'error') {
+            header.className = 'modal-header bg-danger text-white';
+            header.innerHTML = '<h5 class="modal-title fw-bold">❌ Erro</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>';
+        } else if (tipo === 'warning') {
+            header.className = 'modal-header bg-warning text-dark';
+            header.innerHTML = '<h5 class="modal-title fw-bold">⏳ Processando</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button>';
+        } else {
+            header.className = 'modal-header bg-success text-white';
+            header.innerHTML = '<h5 class="modal-title fw-bold">✅ Sucesso</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>';
+        }
+        document.getElementById('modalAvisoBody').innerHTML = msg;
+        
+        if (linkZap && linkZap.includes('wa.me')) {
+            footer.innerHTML = `<button type="button" class="btn btn-secondary w-25 fw-bold" data-bs-dismiss="modal">Fechar</button>
+                                <a href="${linkZap}" target="_blank" class="btn btn-success w-50 fw-bold" onclick="modalAvisoObj.hide()">💬 Enviar Zap</a>`;
+        } else {
+            footer.innerHTML = `<button type="button" class="btn btn-secondary w-50 fw-bold" data-bs-dismiss="modal">OK</button>`;
+        }
+        modalAvisoObj.show();
       }
 
-      function filtrarTecnicos(inputId, listaId) {
-        let input = document.getElementById(inputId);
-        let termo = input.value.toUpperCase();
+      function carregarTabelaEqp() {
+        document.getElementById('tabelaEqpCorpo').innerHTML = `<tr><td colspan="7" class="py-4 text-muted"><div class="spinner-border spinner-border-sm text-secondary"></div> Conectando API...</td></tr>`;
+        
+        chamarBackend('obterListaTecnicos')
+          .then(tecnicos => {
+            listaTecnicosCache = tecnicos || [];
+            return chamarBackend('listarEquipamentos');
+          })
+          .then(dados => {
+            listaEqpCache = dados || [];
+            filtrarTabelaEqp();
+          })
+          .catch(e => {
+            document.getElementById('tabelaEqpCorpo').innerHTML = `<tr><td colspan="7" class="py-4 text-danger fw-bold">❌ Falha de Conexão: ${e.message}</td></tr>`;
+          });
+      }
+
+      function filtrarTecnicos(inputObj, listaId) {
+        let termo = inputObj.value.toUpperCase();
         let lista = document.getElementById(listaId);
         lista.innerHTML = '';
+        if (termo.length < 1 && event.type === 'keyup') { lista.style.display = 'none'; return; }
         
-        if (termo.length < 1 && event.type === 'keyup') {
-          lista.style.display = 'none'; return;
-        }
-
         let filtrados = listaTecnicosCache.filter(t => t.toUpperCase().includes(termo));
         if (filtrados.length > 0) {
           lista.style.display = 'block';
           filtrados.forEach(t => {
             let li = document.createElement('li');
-            li.className = 'list-group-item sugestao-item border-primary border-top-0 border-end-0 border-bottom-1 border-start-0 py-3';
+            li.className = 'list-group-item sugestao-item border-primary border-top-0 border-end-0 border-bottom-1 border-start-0';
             li.innerText = t;
-            li.onclick = function() { input.value = t; lista.style.display = 'none'; };
+            li.onclick = function() { inputObj.value = t; lista.style.display = 'none'; };
             lista.appendChild(li);
           });
-        } else {
-          lista.style.display = 'none';
-        }
+        } else { lista.style.display = 'none'; }
       }
 
       document.addEventListener('click', function(e) {
-        if (e.target.id !== 'eqpTecnico') { let l1 = document.getElementById('lista-tecnicos-entrada'); if(l1) l1.style.display = 'none'; }
-        if (e.target.id !== 'saidaTecnico') { let l2 = document.getElementById('lista-tecnicos-saida'); if(l2) l2.style.display = 'none'; }
+        document.querySelectorAll('[id^="sug-"]').forEach(l => {
+           if(e.target.nextElementSibling !== l) l.style.display = 'none';
+        });
       });
 
       function filtrarTabelaEqp() {
         const termo = String(document.getElementById('buscaEqp').value).toLowerCase();
         const status = document.getElementById('filtroStatusEqp').value;
         const filtrados = listaEqpCache.filter(i => {
-          const mTermo = String(i.clienteEntregou).toLowerCase().includes(termo) || String(i.equipamentos).toLowerCase().includes(termo) || String(i.tecnicoRecebeu).toLowerCase().includes(termo);
+          const mTermo = String(i.clienteEntregou).toLowerCase().includes(termo) || String(i.equipamentos).toLowerCase().includes(termo) || String(i.tecnicoManutencao).toLowerCase().includes(termo) || String(i.tecnicoRecebeu).toLowerCase().includes(termo);
           const mStatus = (status === "TODOS" || i.status === status);
           return mTermo && mStatus;
         });
@@ -303,110 +370,150 @@
         document.getElementById('contadorEqp').innerText = lista ? lista.length : 0;
         
         if (!lista || lista.length === 0) { 
-            tbody.innerHTML = '<tr><td colspan="5" class="py-4 text-muted">Nenhum equipamento localizado.</td></tr>'; 
+            tbody.innerHTML = '<tr><td colspan="7" class="py-4 text-muted">Nenhum equipamento localizado.</td></tr>'; 
             return; 
         }
-        
-        let html = '';
-        lista.forEach(item => {
-          let isOficina = (item.status === "NA OFICINA");
-          let bColor = isOficina ? "bg-warning text-dark" : "bg-success";
-          let dataSplit = item.dataEntrada.split(" ");
-          let dataExibicao = dataSplit[0].substring(0,5); // Apenas DD/MM
+
+        try {
+          const iconeZap = document.getElementById('svg-zap').innerHTML;
+          const iconeEmail = document.getElementById('svg-email').innerHTML;
+          const iconeEdit = document.getElementById('svg-edit').innerHTML;
+          const iconeDel = document.getElementById('svg-del').innerHTML;
+          const iconeSaida = document.getElementById('svg-saida').innerHTML;
+
+          let html = '';
+          lista.forEach(item => {
+            let bColor = item.status === "NA OFICINA" ? "bg-warning text-dark" : "bg-success";
+            let dataExibicao = item.dataEntrada.split(" ")[0].substring(0,5); 
+            let tecRec = item.tecnicoRecebeu || '<span class="text-muted small">-</span>';
+            let tecMnt = item.tecnicoManutencao || '<span class="text-muted small">-</span>';
+            
+            let msgZ = (item.status === "NA OFICINA")
+              ? "*Comprovante - ATIC GAP-BE* 🛡️\n\nOlá *" + item.clienteEntregou + "*,\nReenviando recibo.\n\n*Data:* " + item.dataEntrada + "\n*Eqp:* " + item.equipamentos + "\n*Téc:* " + item.tecnicoRecebeu
+              : "*Devolução - ATIC GAP-BE* 📤\n\nReenviando devolução.\n\n*Eqp:* " + item.equipamentos + "\n*Manutenção:* " + (item.tecnicoManutencao || "-") + "\n*Téc:* " + item.tecnicoDevolveu;
+            
+            let linkZ = "https://wa.me/55" + item.celular.replace(/\D/g,"") + "?text=" + encodeURIComponent(msgZ);
+            linkZ = linkZ.replace(/'/g, "\\'"); 
+
+            let btnZap = (item.celular.length >= 10) ? `<button class="btn btn-outline-success btn-acao d-inline-flex align-items-center justify-content-center" title="WhatsApp" onclick="window.open('${linkZ}', '_blank')">${iconeZap}</button>` : "";
+            let btnEmail = (item.email && item.email.includes("@")) ? `<button class="btn btn-outline-info btn-acao d-inline-flex align-items-center justify-content-center" title="Reenviar E-mail" onclick="acionarReenvioEmail(${item.linha})">${iconeEmail}</button>` : "";
+            let btnEdit = `<button class="btn btn-outline-primary btn-acao d-inline-flex align-items-center justify-content-center" title="Editar" onclick="abrirModalEditar(${item.linha})">${iconeEdit}</button>`;
+            let btnDel = `<button class="btn btn-outline-danger btn-acao d-inline-flex align-items-center justify-content-center" title="Excluir" onclick="excluirRegistroEqp(${item.linha})">${iconeDel}</button>`;
+            
+            let btnSaida = item.status === "NA OFICINA" 
+              ? `<button class="btn btn-success fw-bold btn-acao shadow-sm d-inline-flex align-items-center justify-content-center gap-1" onclick="abrirModalSaida(${item.linha})">${iconeSaida} Saída</button>` 
+              : "";
+
+            html += `<tr>
+              <td class="fw-bold text-secondary align-middle">${dataExibicao}</td>
+              <td class="fw-bold align-middle">${item.clienteEntregou}</td>
+              <td class="text-truncate align-middle" style="max-width:120px;" title="${item.equipamentos}">${item.equipamentos}</td>
+              <td class="align-middle">${tecRec}</td>
+              <td class="align-middle">${tecMnt}</td>
+              <td class="align-middle"><span class="badge ${bColor}">${item.status}</span></td>
+              <td class="text-nowrap align-middle">${btnZap}${btnEmail}${btnSaida}${btnEdit}${btnDel}</td>
+            </tr>`;
+          });
+          tbody.innerHTML = html;
           
-          let btnZap = "";
-          if (item.celular && item.celular.length >= 10) {
-            let celL = item.celular.replace(/\D/g, "");
-            let msgZ = isOficina 
-              ? `*Comprovante - ATIC GAP-BE* 🛡️\n\nOlá *${item.clienteEntregou}*,\nReenviando recibo.\n\n*Data:* ${item.dataEntrada}\n*Eqp:* ${item.equipamentos}\n*Téc:* ${item.tecnicoRecebeu}`
-              : `*Devolução - ATIC GAP-BE* 📤\n\nReenviando devolução.\n\n*Eqp:* ${item.equipamentos}\n*Téc:* ${item.tecnicoDevolveu}`;
-            let linkZ = "https://wa.me/55" + celL + "?text=" + encodeURIComponent(msgZ);
-            btnZap = `<button class="btn btn-sm btn-outline-success me-1 py-1 px-2" onclick="window.open('${linkZ}', '_blank')"><i class="bi bi-whatsapp"></i></button>`;
-          }
-
-          let btnEmail = (item.email && item.email.includes("@")) 
-            ? `<button class="btn btn-sm btn-outline-primary me-1 py-1 px-2" onclick="acionarReenvioEmail(${item.linha})"><i class="bi bi-envelope"></i></button>` : "";
-
-          let btnSaida = isOficina 
-            ? `<button class="btn btn-sm btn-success fw-bold ms-1 py-1 px-2" onclick="abrirModalSaida(${item.linha})"><i class="bi bi-box-arrow-right"></i></button>` 
-            : `<i class="bi bi-check-circle-fill text-success ms-2 fs-5"></i>`;
-
-          html += `<tr>
-            <td class="fw-bold text-secondary">${dataExibicao}</td>
-            <td class="fw-bold">${item.clienteEntregou}</td>
-            <td class="text-truncate" style="max-width:120px;">${item.equipamentos}</td>
-            <td><span class="badge ${bColor}">${item.status}</span></td>
-            <td class="text-nowrap">${btnZap}${btnEmail}${btnSaida}</td>
-          </tr>`;
-        });
-        tbody.innerHTML = html;
+        } catch(err) {
+          tbody.innerHTML = `<tr><td colspan="7" class="py-4 text-danger fw-bold">❌ Erro Interno de Renderização: ${err.message}</td></tr>`;
+        }
       }
 
       function acionarReenvioEmail(linha) {
-        mostrarAviso("⏳ Solicitando reenvio de e-mail ao servidor...", "success");
+        mostrarAviso("Enviando ordem para o servidor de E-mail...", "warning");
         chamarBackend('reenviarEmailEquipamento', { linha: linha })
-          .then(r => mostrarAviso(r.mensagem, 'success'))
-          .catch(e => mostrarAviso("Falha: " + e.message, 'error'));
+          .then(r => mostrarAviso(r.mensagem, r.sucesso ? 'success' : 'error'))
+          .catch(e => mostrarAviso("Falha na comunicação: " + e.message, 'error'));
       }
 
-      function abrirModalEntrada() {
-        document.getElementById('formEntrada').reset();
-        if(!modalInstanceEntrada) modalInstanceEntrada = new bootstrap.Modal(document.getElementById('modalEntrada')); 
-        modalInstanceEntrada.show();
-      }
+      function abrirModalEntrada() { document.getElementById('formEntrada').reset(); modalInstanceEntrada.show(); }
+      function abrirModalSaida(linha) { document.getElementById('formSaida').reset(); document.getElementById('saidaLinha').value = linha; modalInstanceSaida.show(); }
       
-      function abrirModalSaida(linha) {
-        document.getElementById('formSaida').reset(); 
-        document.getElementById('saidaLinha').value = linha; 
-        if(!modalInstanceSaida) modalInstanceSaida = new bootstrap.Modal(document.getElementById('modalSaida')); 
-        modalInstanceSaida.show();
+      function abrirModalEditar(linha) {
+        const item = listaEqpCache.find(i => i.linha === linha);
+        document.getElementById('editLinha').value = item.linha;
+        document.getElementById('editDataEntrada').value = item.dataEntrada;
+        document.getElementById('editClienteEntregou').value = item.clienteEntregou;
+        document.getElementById('editCelular').value = item.celular;
+        document.getElementById('editEmail').value = item.email;
+        document.getElementById('editTecRecebeu').value = item.tecnicoRecebeu;
+        document.getElementById('editEquipamentos').value = item.equipamentos;
+        document.getElementById('editProblema').value = item.problema;
+        document.getElementById('editStatus').value = item.status;
+        document.getElementById('editDataSaida').value = item.dataSaida;
+        document.getElementById('editTecDevolveu').value = item.tecnicoDevolveu;
+        document.getElementById('editClienteRecebeu').value = item.clienteRecebeu;
+        document.getElementById('editTecManutencao').value = item.tecnicoManutencao;
+        modalInstanceEditar.show();
       }
 
-      function processarEntrada(event) {
-        event.preventDefault();
-        const btn = document.getElementById("btnSalvarEntrada"); 
-        btn.disabled = true; btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Processando...';
-        
-        const dados = { 
-          cliente: document.getElementById("eqpCliente").value, tecnico: document.getElementById("eqpTecnico").value, 
-          celular: document.getElementById("eqpCelular").value, email: document.getElementById("eqpEmail").value, 
-          descricao: document.getElementById("eqpDescricao").value, problema: document.getElementById("eqpProblema").value 
-        };
+      function processarEntrada(e) {
+        e.preventDefault(); const btn = document.getElementById("btnSalvarEntrada"); btn.disabled = true; btn.innerHTML = 'Processando...';
+        const dados = { cliente: document.getElementById("eqpCliente").value, tecnico: document.getElementById("eqpTecnico").value, celular: document.getElementById("eqpCelular").value, email: document.getElementById("eqpEmail").value, descricao: document.getElementById("eqpDescricao").value, problema: document.getElementById("eqpProblema").value };
         
         chamarBackend('salvarEntradaEquipamento', { dados: dados })
-          .then(r => {
-            modalInstanceEntrada.hide(); carregarTabelaEqp();
-            if (r.linkZap !== "") confirmarZap(r.mensagem, r.linkZap); else mostrarAviso(r.mensagem, 'success');
-            btn.disabled = false; btn.innerHTML = 'Confirmar Entrada';
+          .then(r => { 
+            if(r.sucesso) { modalInstanceEntrada.hide(); carregarTabelaEqp(); }
+            mostrarAviso(r.mensagem, r.sucesso ? 'success' : 'error', r.linkZap);
+            btn.disabled = false; btn.innerHTML = 'Confirmar Entrada'; 
           })
           .catch(e => {
-            mostrarAviso("❌ Falha crítica: " + e.message, 'error');
+            mostrarAviso("Erro crítico: " + e.message, 'error');
             btn.disabled = false; btn.innerHTML = 'Confirmar Entrada';
           });
       }
 
-      function processarSaida(event) {
-        event.preventDefault();
-        const btn = document.getElementById("btnSalvarSaida"); 
-        btn.disabled = true; btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Dando Baixa...';
-        
-        const dados = { 
-          linha: document.getElementById("saidaLinha").value, 
-          tecEntregou: document.getElementById("saidaTecnico").value, 
-          clienteRecebeu: document.getElementById("saidaCliente").value 
-        };
+      function processarSaida(e) {
+        e.preventDefault(); const btn = document.getElementById("btnSalvarSaida"); btn.disabled = true; btn.innerHTML = 'Baixando...';
+        const dados = { linha: document.getElementById("saidaLinha").value, tecEntregou: document.getElementById("saidaTecnico").value, clienteRecebeu: document.getElementById("saidaCliente").value, tecManutencao: document.getElementById("saidaTecManutencao").value };
         
         chamarBackend('registrarSaidaEquipamento', { dados: dados })
-          .then(r => {
-            modalInstanceSaida.hide(); carregarTabelaEqp();
-            if (r.linkZap !== "") confirmarZap(r.mensagem, r.linkZap); else mostrarAviso(r.mensagem, 'success');
-            btn.disabled = false; btn.innerHTML = 'Concluir Devolução';
+          .then(r => { 
+            if(r.sucesso) { modalInstanceSaida.hide(); carregarTabelaEqp(); }
+            mostrarAviso(r.mensagem, r.sucesso ? 'success' : 'error', r.linkZap);
+            btn.disabled = false; btn.innerHTML = 'Concluir Devolução'; 
           })
           .catch(e => {
-            mostrarAviso("❌ Falha crítica: " + e.message, 'error');
+            mostrarAviso("Erro crítico: " + e.message, 'error');
             btn.disabled = false; btn.innerHTML = 'Concluir Devolução';
           });
       }
+
+      function processarEdicao(e) {
+        e.preventDefault(); const btn = document.getElementById("btnSalvarEdicao"); btn.disabled = true; btn.innerHTML = 'Gravando...';
+        const dados = { 
+          linha: document.getElementById("editLinha").value, dataEntrada: document.getElementById("editDataEntrada").value, clienteEntregou: document.getElementById("editClienteEntregou").value, celular: document.getElementById("editCelular").value, email: document.getElementById("editEmail").value, tecnicoRecebeu: document.getElementById("editTecRecebeu").value, equipamentos: document.getElementById("editEquipamentos").value, problema: document.getElementById("editProblema").value, status: document.getElementById("editStatus").value, dataSaida: document.getElementById("editDataSaida").value, tecnicoDevolveu: document.getElementById("editTecDevolveu").value, clienteRecebeu: document.getElementById("editClienteRecebeu").value, tecnicoManutencao: document.getElementById("editTecManutencao").value
+        };
+        
+        chamarBackend('atualizarEquipamento', { dados: dados })
+          .then(r => {
+            mostrarAviso(r.mensagem, r.sucesso ? 'success' : 'error');
+            if(r.sucesso) { modalInstanceEditar.hide(); carregarTabelaEqp(); }
+            btn.disabled = false; btn.innerHTML = 'Gravar Alterações';
+          })
+          .catch(e => {
+            mostrarAviso("Erro crítico: " + e.message, 'error');
+            btn.disabled = false; btn.innerHTML = 'Gravar Alterações';
+          });
+      }
+
+      function excluirRegistroEqp(linha) {
+        linhaParaExcluir = linha;
+        document.getElementById('modalConfirmacaoBody').innerHTML = `Tem certeza que deseja excluir permanentemente o registro da linha <b>${linha}</b>?`;
+        modalConfirmaObj.show();
+      }
+
+      document.getElementById('btnConfirmaExclusao').addEventListener('click', function() {
+        modalConfirmaObj.hide();
+        chamarBackend('excluirEquipamento', { linha: linhaParaExcluir })
+          .then(r => {
+            mostrarAviso(r.mensagem, r.sucesso ? 'success' : 'error');
+            if(r.sucesso) carregarTabelaEqp();
+          })
+          .catch(e => mostrarAviso("Erro ao excluir: " + e.message, 'error'));
+      });
     </script>
   </body>
 </html>
